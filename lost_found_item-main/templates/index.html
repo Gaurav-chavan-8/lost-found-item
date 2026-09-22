@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Lost & Found{% endblock %}
+{% block content %}
+
+<div class="hero-card">
+  <p class="eyebrow">Overview</p>
+  <div class="d-flex justify-content-between align-items-end gap-3 flex-wrap">
+    <div>
+      <h2>Keep every lost item and found item in view.</h2>
+      <p class="hero-copy">A faster, calmer way to track reports, review matches, and close cases without the clutter.</p>
+    </div>
+    <div class="hero-actions">
+      <a href="{{ url_for('add_item') }}" class="btn btn-primary">Report Item</a>
+      <a href="{{ url_for('matches_overview') }}" class="btn btn-light">View Matches</a>
+    </div>
+  </div>
+</div>
+
+<div class="metric-grid">
+  <div class="metric-card metric-card--lost">
+    <div class="metric-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <span class="metric-label">Lost</span>
+    <p class="metric-value text-danger">{{ total_lost }}</p>
+  </div>
+  <div class="metric-card metric-card--found">
+    <div class="metric-icon"><i class="fa-solid fa-box-open"></i></div>
+    <span class="metric-label">Found</span>
+    <p class="metric-value text-success">{{ total_found }}</p>
+  </div>
+  <div class="metric-card metric-card--open">
+    <div class="metric-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+    <span class="metric-label">Open</span>
+    <p class="metric-value text-warning">{{ total_open }}</p>
+  </div>
+  <div class="metric-card metric-card--resolved">
+    <div class="metric-icon"><i class="fa-solid fa-check-circle"></i></div>
+    <span class="metric-label">Resolved</span>
+    <p class="metric-value text-primary">{{ total_resolved }}</p>
+  </div>
+</div>
+
+<div class="section-header">
+  <h4>Recently reported</h4>
+  <a href="{{ url_for('view_items') }}" class="btn btn-sm btn-outline-primary">View all</a>
+</div>
+
+<div class="recent-grid">
+  {% for item in recent %}
+  <div class="item-card">
+    <div class="card-body">
+      <div class="item-topline">
+        <span class="type-pill {{ item.item_type }}">{{ item.item_type }}</span>
+        <span class="category-pill">{{ item.category }}</span>
+      </div>
+      <h6>{{ item.item_name }}</h6>
+      <p class="meta-text"><i class="fa-solid fa-location-dot me-2 text-muted"></i>{{ item.location }}</p>
+      <p class="meta-text">{{ item.description[:80] }}{% if item.description|length > 80 %}...{% endif %}</p>
+    </div>
+  </div>
+  {% else %}
+  <div class="empty-state col-12">No items reported yet. <a href="{{ url_for('add_item') }}">Add the first report</a>.</div>
+  {% endfor %}
+</div>
+
+<div class="info-note mt-4">
+  <i class="fa-solid fa-lightbulb"></i>
+  <span><strong>Smart Matches</strong> compares open lost reports with found reports to suggest likely matches automatically.</span>
+</div>
+
+{% endblock %}

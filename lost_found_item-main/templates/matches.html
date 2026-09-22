@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Smart Matches - Lost & Found{% endblock %}
+{% block content %}
+
+{% if results is not none %}
+  <div class="filter-shell">
+    <div>
+      <p class="eyebrow mb-1">Smart matching</p>
+      <h4 class="mb-0">Best recommendation for each open lost report</h4>
+    </div>
+  </div>
+
+  <div class="match-grid">
+    {% for lost, best in results %}
+    <div class="match-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="type-pill lost">Lost</span>
+        <span class="category-pill">{{ lost.category }}</span>
+      </div>
+      <h6>{{ lost.item_name }}</h6>
+      <p class="meta-text mb-2">{{ lost.description }}</p>
+      <p class="meta-text mb-0"><i class="fa-solid fa-location-dot me-2"></i>{{ lost.location }} &middot; {{ lost.event_date }}</p>
+
+      {% if best %}
+        <div class="match-highlight">
+          <strong>{{ best[0] }}% match</strong> with found item <strong>{{ best[1].item_name }}</strong> at {{ best[1].location }}.
+        </div>
+        <a href="{{ url_for('matches_for_item', item_id=lost.id) }}" class="btn btn-outline-primary btn-sm">View all candidates</a>
+      {% else %}
+        <div class="info-note mt-3 mb-0">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>No strong match yet.</span>
+        </div>
+      {% endif %}
+    </div>
+    {% else %}
+    <div class="empty-state">No open lost items to match right now.</div>
+    {% endfor %}
+  </div>
+
+{% else %}
+  <div class="filter-shell">
+    <div>
+      <p class="eyebrow mb-1">Candidate matches</p>
+      <h4 class="mb-0">For {{ single_item.item_type|upper }} item: {{ single_item.item_name }}</h4>
+    </div>
+  </div>
+
+  <div class="match-grid">
+    {% for score, cand in candidates %}
+    <div class="match-card">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="type-pill {{ cand.item_type }}">{{ cand.item_type }}</span>
+        <span class="score-pill">{{ score }}% match</span>
+      </div>
+      <h6>{{ cand.item_name }} <small class="text-muted">({{ cand.category }})</small></h6>
+      <p class="meta-text mb-2">{{ cand.description }}</p>
+      <p class="meta-text mb-2"><i class="fa-solid fa-location-dot me-2"></i>{{ cand.location }} &middot; {{ cand.event_date }}</p>
+      <p class="meta-text mb-0"><i class="fa-solid fa-address-card me-2"></i>{{ cand.person_name }} &middot; {{ cand.contact }}</p>
+    </div>
+    {% else %}
+    <div class="empty-state">No candidate matches found above the similarity threshold.</div>
+    {% endfor %}
+  </div>
+
+  <a href="{{ url_for('view_items') }}" class="btn btn-link mt-3 px-0">&larr; Back to all items</a>
+{% endif %}
+
+{% endblock %}

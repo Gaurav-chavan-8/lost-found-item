@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Edit Item - Lost & Found{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="form-card">
+      <p class="eyebrow">Update</p>
+      <h3>Edit {{ item.item_type|capitalize }} item #{{ item.id }}</h3>
+      <form method="post">
+        <div class="form-grid">
+          <div>
+            <label class="form-label">Item name</label>
+            <input type="text" class="form-control" name="item_name" value="{{ item.item_name }}" required>
+          </div>
+          <div>
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category" required>
+              {% for c in categories %}
+              <option value="{{ c }}" {{ 'selected' if c==item.category }}>{{ c }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="full">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3" required>{{ item.description }}</textarea>
+          </div>
+          <div>
+            <label class="form-label">Location</label>
+            <input type="text" class="form-control" name="location" value="{{ item.location }}" required>
+          </div>
+          <div>
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="event_date" value="{{ item.event_date }}" required>
+          </div>
+          <div>
+            <label class="form-label">Reporter name</label>
+            <input type="text" class="form-control" name="person_name" value="{{ item.person_name }}" required>
+          </div>
+          <div>
+            <label class="form-label">Contact</label>
+            <input type="text" class="form-control" name="contact" value="{{ item.contact }}" required>
+          </div>
+          <div>
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">
+              <option value="open" {{ 'selected' if item.status=='open' }}>Open</option>
+              <option value="resolved" {{ 'selected' if item.status=='resolved' }}>Resolved</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-foot">
+          <span class="inline-note">Changes are saved immediately.</span>
+          <div>
+            <a href="{{ url_for('view_items') }}" class="btn btn-light me-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

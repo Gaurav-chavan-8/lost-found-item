@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}All Items - Lost & Found{% endblock %}
+{% block content %}
+
+<div class="filter-shell">
+  <div>
+    <p class="eyebrow mb-1">Records</p>
+    <h4 class="mb-0">All reported items</h4>
+  </div>
+  <form class="filter-form" method="get">
+    <select name="type" class="form-select" onchange="this.form.submit()">
+      <option value="all" {{ 'selected' if item_type=='all' }}>All types</option>
+      <option value="lost" {{ 'selected' if item_type=='lost' }}>Lost</option>
+      <option value="found" {{ 'selected' if item_type=='found' }}>Found</option>
+    </select>
+    <select name="status" class="form-select" onchange="this.form.submit()">
+      <option value="all" {{ 'selected' if status=='all' }}>All statuses</option>
+      <option value="open" {{ 'selected' if status=='open' }}>Open</option>
+      <option value="resolved" {{ 'selected' if status=='resolved' }}>Resolved</option>
+    </select>
+  </form>
+</div>
+
+<div class="table-shell table-responsive">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>#</th><th>Type</th><th>Item</th><th>Category</th><th>Location</th>
+        <th>Date</th><th>Reported by</th><th>Status</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.id }}</td>
+        <td><span class="type-pill {{ item.item_type }}">{{ item.item_type }}</span></td>
+        <td>
+          <p class="table-name">{{ item.item_name }}</p>
+          <p class="table-subtext">{{ item.description[:60] }}{% if item.description|length > 60 %}...{% endif %}</p>
+        </td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.location }}</td>
+        <td>{{ item.event_date }}</td>
+        <td>
+          <p class="table-name mb-1">{{ item.person_name }}</p>
+          <p class="table-subtext">{{ item.contact }}</p>
+        </td>
+        <td><span class="status-pill {{ item.status }}">{{ item.status }}</span></td>
+        <td>
+          <div class="action-stack">
+            <a href="{{ url_for('matches_for_item', item_id=item.id) }}" class="icon-btn" title="Find matches"><i class="fa-solid fa-wand-magic-sparkles"></i></a>
+            <a href="{{ url_for('edit_item', item_id=item.id) }}" class="icon-btn" title="Edit"><i class="fa-solid fa-pen"></i></a>
+            {% if item.status == 'open' %}
+            <form action="{{ url_for('resolve_item', item_id=item.id) }}" method="post" class="d-inline">
+              <button class="icon-btn" title="Mark resolved"><i class="fa-solid fa-check"></i></button>
+            </form>
+            {% endif %}
+            <form action="{{ url_for('delete_item', item_id=item.id) }}" method="post" class="d-inline"
+                  onsubmit="return confirm('Delete this item permanently?');">
+              <button class="icon-btn icon-btn--danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="9" class="text-center text-muted py-4">No items match this filter.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

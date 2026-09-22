@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Report Item - Lost & Found{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="form-card">
+      <p class="eyebrow">New report</p>
+      <h3>Report a lost or found item</h3>
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Report type</label>
+          <div class="type-toggle" role="group">
+            <input type="radio" class="btn-check" name="item_type" id="type_lost" value="lost" {{ 'checked' if default_type=='lost' }} required>
+            <label for="type_lost"><i class="fa-solid fa-triangle-exclamation"></i> I lost something</label>
+
+            <input type="radio" class="btn-check" name="item_type" id="type_found" value="found" {{ 'checked' if default_type=='found' }}>
+            <label for="type_found"><i class="fa-solid fa-hand-holding"></i> I found something</label>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <label class="form-label">Item name</label>
+            <input type="text" class="form-control" name="item_name" placeholder="e.g., Black Wallet" required>
+          </div>
+          <div>
+            <label class="form-label">Category</label>
+            <select class="form-select" name="category" required>
+              {% for c in categories %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="full">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="3" placeholder="Color, brand, distinguishing marks, contents, etc." required></textarea>
+          </div>
+          <div>
+            <label class="form-label">Location</label>
+            <input type="text" class="form-control" name="location" placeholder="e.g., Library, 2nd Floor" required>
+          </div>
+          <div>
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="event_date" value="{{ today }}" required>
+          </div>
+          <div>
+            <label class="form-label">Your name</label>
+            <input type="text" class="form-control" name="person_name" required>
+          </div>
+          <div>
+            <label class="form-label">Contact</label>
+            <input type="text" class="form-control" name="contact" placeholder="Email or phone number" required>
+          </div>
+        </div>
+
+        <div class="form-foot">
+          <span class="inline-note">Your report will be added to the record list instantly.</span>
+          <div>
+            <a href="{{ url_for('view_items') }}" class="btn btn-light me-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Submit report</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

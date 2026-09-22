@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Lost & Found Intelligence System{% endblock %}</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg app-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('dashboard') }}">
+      <span class="brand-mark">LF</span>
+      <span>Lost &amp; Found</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="nav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('view_items') }}">All Items</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('matches_overview') }}">Smart Matches</a></li>
+        <li class="nav-item"><button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"><i class="fa-solid fa-moon"></i></button></li>
+        <li class="nav-item"><a class="btn btn-primary nav-cta" href="{{ url_for('add_item') }}">+ Report Item</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container page-shell">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</div>
+
+<footer class="app-footer">
+  Lost &amp; Found Intelligence System &mdash; simple, clean, and built for quick resolution.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+  const body = document.body;
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'light') {
+    body.setAttribute('data-theme', 'light');
+  } else {
+    body.setAttribute('data-theme', 'dark');
+  }
+
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    const icon = themeToggle.querySelector('i');
+    const syncIcon = () => {
+      icon.className = body.getAttribute('data-theme') === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+    };
+
+    syncIcon();
+
+    themeToggle.addEventListener('click', () => {
+      const isLight = body.getAttribute('data-theme') === 'light';
+      body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+      localStorage.setItem('theme', isLight ? 'dark' : 'light');
+      syncIcon();
+    });
+  }
+</script>
+</body>
+</html>
