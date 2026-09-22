@@ -1,5 +1,5 @@
 # Lost & Found Intelligence System
-### DBMS Mini-Project with Database Connectivity — TAE-2 (10 Marks)
+### DBMS Mini-Project with Database Connectivity 
 
 A campus Lost & Found portal where students can report lost or found items,
 browse/search all reports, update or resolve cases, and get **automatic
