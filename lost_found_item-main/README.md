@@ -120,7 +120,7 @@ The assignment allows any DBMS. If you'd rather demonstrate MySQL:
 
 ---
 
-## 7. Possible Extensions (for extra polish / viva questions)
+## 7. Possible Extensions (for extra polish )
 
 - Split into `users`, `categories`, `items` tables with foreign keys to show
   normalization (3NF) and JOIN queries.
@@ -129,11 +129,3 @@ The assignment allows any DBMS. If you'd rather demonstrate MySQL:
 - Add email notification when a match is found (using `smtplib`).
 - Add full-text search using SQLite's `FTS5` extension.
 
-## 8. Common Viva Questions to Prepare
-
-- What is the difference between `DELETE` and `DROP`? (used `DELETE FROM items`)
-- Why use parameterized queries (`?`) instead of string formatting? (SQL injection)
-- Explain the CRUD mapping to HTTP methods (GET vs POST).
-- Walk through the ER diagram / schema and primary key choice.
-- Explain the similarity/matching algorithm's time complexity (O(n) per
-  lost item against all open found items).
